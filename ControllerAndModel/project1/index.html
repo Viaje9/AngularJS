@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <script src="controller.js"></script>
+    <script src="directive.js"></script>
+    <script src="filter.js"></script>
+    <script src="service.js"></script>
+    <script src="app.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="Controller as main">
+        {{main.sayHello()}}
+        <br>
+        {{main.sayHello('jase')}}
+        <br>
+        <input type="text" ng-model="main.data" ng-init="main.data=555">
+        <br>
+        {{main.data}}
+        <br>
+        {{main.test}}
+
+    </div>
+    <script>
+        (function () {
+            var app = angular.module('app', []);
+
+            app.controller('Controller', [function () {
+                this.sayHello = (name) => {
+                    return name || "world";
+                }
+                this.data = 123;
+                this.test = 123;
+
+            }])
+        })();
+
+    </script>
+</body>
+
+</html>

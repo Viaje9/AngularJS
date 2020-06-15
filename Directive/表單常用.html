@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        .marginAuto {
+            margin: 5px auto;
+            width: 400px;
+            border: solid 1px black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="marginAuto">
+        <h2>ng-options</h2>
+        <div ng-controller="AngularController as angular">
+            <select name="options" ng-model="angular.select"
+                ng-options="item.name as item.name + ' -- ' + item.price for item in angular.options">
+                <option value="">-選擇-</option>
+            </select>
+            {{angular.select}}
+        </div>
+        <div ng-controller="AngularController as angular">
+            <select name="options" ng-model="angular.select"
+                ng-options="item.name group by item.type for item in angular.options">
+                <option value="">-選擇-</option>
+            </select>
+        </div>
+    </div>
+    <div class="marginAuto">
+        <h2>ng-submit</h2>
+        <div ng-controller="SubmitController as angular">
+            <form ng-submit="angular.submit()">
+
+                <div>
+                    <label><strong>紅藥水</strong></label>
+                    <span>請輸入購買數量：</span>
+                    <input type="text" ng-model="angular.red">
+                </div>
+
+                <div>
+                    <label><strong>藍藥水</strong></label>
+                    <span>請輸入購買數量：</span>
+                    <input type="text" ng-model="angular.blue">
+                </div>
+                <br>
+                <input type="submit" value="購買">
+            </form>
+            <p ng-repeat="item in angular.items">
+                物品：紅藥水 {{item.red}}，藍藥水 {{item.blue}}
+            </p>
+        </div>
+    </div>
+    <div class="marginAuto">
+        <h2>ng-form</h2>
+        <div ng-controller="FormController as angular">
+            <form ng-submit="angular.submit()">
+                <ng-form ng-repeat="item in angular.items">
+                    ID：
+                    <input type="text" ng-model="item.id">
+                    <br>
+                    暱稱：
+                    <input type="text" ng-model="item.name">
+                    <br>
+                </ng-form>
+                <br>
+                <input type="submit" value="新增" ng-click="angular.addItem()">
+                <input type="submit" value="儲存">
+            </form>
+            
+            {{angular.items}}
+            <p ng-repeat="item in angular.items"></p>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('AngularController', function () {
+            this.options = [{
+                type: '武器',
+                name: '木劍',
+                price: 300
+            }, {
+                type: '武器',
+                name: '鐵劍',
+                price: 800
+            }, {
+                type: '盔甲',
+                name: '木盔甲',
+                price: 1500
+            }, {
+                type: '盔甲',
+                name: '鐵盔甲',
+                price: 3500
+            }]
+            this.select = '';
+        })
+
+        app.controller('SubmitController', function () {
+            this.items = [];
+            this.red = 0;
+            this.blue = 0;
+            this.submit = () => {
+                this.items.push({
+                    red: this.red,
+                    blue: this.blue
+                });
+            };
+        });
+
+        app.controller('FormController', function () {
+            this.items = [{
+                id: '',
+                name: ''
+            }];
+
+            this.submit = () => {
+                console.log(this.items);
+            };
+
+            this.addItem = () => {
+                this.items.push({
+                    id: '',
+                    name: ''
+                });
+            };
+        });
+    </script>
+</body>
+
+</html>

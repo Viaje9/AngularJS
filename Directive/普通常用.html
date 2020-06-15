@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+        .marginAuto {
+            margin: 5px auto;
+            width: 400px;
+            border: solid 1px black;
+        }
+
+        .red {
+            color: red;
+        }
+        .blue {
+            color: blue; 
+        }
+
+        .color {
+            color: red;
+        }
+
+        .border {
+            width: 200px;
+            border: 1px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="marginAuto">
+        <h2>ng-model</h2>
+        <p>
+            歡迎冒險者 {{UserName}} 來到Angular的世界!
+        </p>
+        <p>
+            請輸入你的暱稱：
+        </p>
+        <input type="text" ng-model="UserName">   
+    </div>
+
+    <div class="marginAuto" ng-controller="RepeatController as repeat">
+        <h2>ng-repeat</h2>
+        <ul>
+            <li ng-repeat="item in repeat.array">
+                {{$index+1}}.{{item.name}}，攻擊：{{item.atk}}，價錢：{{item.price}}
+            </li>
+        </ul>
+    </div>
+
+    <div class="marginAuto" ng-controller="AngularController as angular">
+        <h2>ng-class1</h2>
+        <div ng-class="{true: 'red', false:'blue'}[angular.isTrue]">紅</div>
+        <div ng-class="{true: 'red', false:'blue'}[angular.isFalse]">藍</div>
+    </div>
+
+    <div class="marginAuto" ng-controller="AngularController as angular">
+        <h2>ng-class2</h2>
+        <div ng-class="{'color':angular.isTrue, 'border':angular.isTrue}">
+            test1
+        </div>
+        <div ng-class="{'color':angular.isTrue, 'border':angular.isFalse}">
+            test2
+        </div>
+        <div ng-class="{'color':angular.isFalse, 'border':angular.isTrue}">
+            test3
+        </div>
+    </div>
+
+    <div class="marginAuto" ng-controller="AngularController as angular">
+        <h2>ng-show & ng-hide</h2>
+        <div ng-show="angular.isTrue">show isTrue</div>
+        <div ng-show="angular.isFalse">show isFalse</div>
+        <div ng-hide="angular.isTrue">hide isTrue</div>
+        <div ng-hide="angular.isFalse">hide isFalse</div>
+    </div>
+    <div class="marginAuto">
+        <h2>ng-if</h2>
+        <span>勾選方塊</span><input type="checkbox" ng-model="checked">
+        <div ng-if="checked">aaa</div>
+    </div>
+    <script>
+        var app = angular.module('app',[]);
+
+        app.controller('RepeatController', function(){
+            this.array = [{
+                name:'木劍',
+                atk: 20,
+                price: 300
+            },{
+                name:'鐵劍',
+                atk: 40,
+                price: 800
+            },{
+                name:'超和金劍',
+                atk: 60,
+                price: 1500
+            },{
+                name:'傳說大劍',
+                atk: 80,
+                price: 3500
+            }]
+        })
+
+        app.controller('AngularController', function(){
+            this.isTrue = true;
+            this.isFalse = false;
+        })
+    </script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <div ng-controller="bookController">
+            {{data}}
+        </div>
+        <div ng-controller="penController">
+            {{data}}
+        </div>
+    </div>
+    <script>
+        (function () {
+            var book = angular.module('book',[]);
+
+            book.controller('bookController',['$scope',function($scope) {
+                $scope.data = "this is book";
+            }]);
+
+            var pen = angular.module('pen',[]);
+
+            pen.controller('penController',['$scope',function($scope) {
+                $scope.data = "this is pen";
+            }]);
+
+            var app = angular.module('app',['book','pen']);
+        })()
+    </script>
+</body>
+</html>

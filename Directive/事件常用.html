@@ -1,0 +1,69 @@
+<html ng-app="app">
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .marginAuto {
+      margin: 5px auto;
+      width: 400px;
+      border: solid 1px black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="marginAuto" ng-controller="AngularController as angular">
+    <h2>ng-change</h2>
+    <label>請輸入</label>
+    <input type="text" ng-model="angular.num" ng-change="angular.count()">
+    <p>結果為：</p>
+    <span>{{angular.result}}</span>
+  </div>
+  <div class="marginAuto" ng-controller="ClickController as angular">
+    <h2>ng-click</h2>
+    <input type="text" readonly="readonly" ng-model="angular.num">
+    <input type="button" ng-click="angular.count()" value="+">
+    <input type="button" ng-click="angular.countLess()" value="-">
+
+  </div>
+  <div class="marginAuto" ng-controller="MouseController as angular">
+    <h2>ng-mouseover & ng-mouseleave</h2>
+    <p ng-mouseover="angular.mouseOver=true" ng-mouseleave="angular.mouseOver=false">滑鼠移動至此</p>
+    <p ng-show="angular.mouseOver">你看的到我</p>
+  </div>
+  <script>
+    var app = angular.module('app', []);
+
+    app.controller('AngularController', function () {
+      this.num = 0;
+      this.count = () => {
+        this.result = this.num * 2;
+      }
+    });
+
+    app.controller('ClickController', function () {
+      this.num = 0;
+      this.count = () => {
+        this.num++;
+      }
+      this.countLess = () => {
+        this.num--;
+      }
+    });
+
+    app.controller('MouseController', function() {
+      this.mouseOver = false;
+    })
+
+  </script>
+</body>
+
+</html>
