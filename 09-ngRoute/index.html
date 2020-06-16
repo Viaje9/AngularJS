@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app='app'>
+
+<head>
+    <!-- 注意版本如果是不是1.4.0版網址可能不同 -->
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.0/angular.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.0/angular-route.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <title>Document</title>
+</head>
+
+<body>
+    <div class="container" >
+        <div class="pull-left">
+            <!-- 1.7.0 href="#!/"-->
+            <a href="#!/soldier" class="btn btn-default">戰士</a>
+            <a href="#!/master" class="btn btn-default">法師</a>
+            <a href="#!/archer" class="btn btn-default">弓箭手</a>
+            <a href="#!/priest" class="btn btn-default">祭司</a>
+        </div>
+        <a href="#!/role" class="btn btn-default">放棄職業</a>
+        <hr>
+        <div ng-view></div>
+    </div>
+    <script>
+        var app = angular.module('app', ['ngRoute']);
+
+        app.config(['$routeProvider',function($routeProvider){
+            $routeProvider.when('/',{
+                templateUrl:'role.html'
+            }).when('/soldier',{
+                templateUrl:'soldier.html'
+            }).when('/master',{
+                templateUrl:'master.html'
+            }).when('/archer',{
+                templateUrl:'archer.html'
+            }).when('/priest',{
+                templateUrl:'priest.html'
+            }).otherwise({
+                redirectTo:'/'
+            });
+        }])
+    </script>
+</body>
+
+</html>

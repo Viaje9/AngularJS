@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div ng-controller="TestController"></div>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('TestController', function () {
+            var ct = angular.isNumber(123);
+            var dt = angular.isNumber(new Date());
+            
+            console.log(`CT is ${ct}`);
+            console.log(`DT is ${dt}`);
+        })
+    </script>
+</body>
+</html>

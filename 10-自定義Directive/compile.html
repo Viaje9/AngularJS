@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+  
+    <directive-hello></directive-hello>
+    <script>
+        var app = angular.module('app',[]);
+
+        app.directive('directiveHello',function(){
+            return {
+                restrict: 'E',
+                compile: function(el,art) {
+                    var type = art.type || 'button';
+                    // var val = art.value;
+                    var val = art.value || '確認';
+                    var css = (type === 'button') ? ('btn-info') : ('');
+                    var show = `<input type="${type}" value='${val}' class='${css}'>`
+                    el.replaceWith(show);
+                }
+                
+            }
+        })
+
+     
+    </script>
+</body>
+</html>

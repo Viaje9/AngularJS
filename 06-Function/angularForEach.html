@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="ForeachController"></div>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('ForeachController', function () {
+            var self = this;
+            self.data = [{
+                id: 132,
+                name: 456,
+                title: 789
+            }, {
+                id: 13452,
+                name: 4564,
+                title: 7849
+            }, {
+                id: 132,
+                name: 4554566,
+                title: 7589
+            }];
+
+            angular.forEach(self.data, function (value, key) {
+                console.log(key,value);
+            });
+        })
+
+
+    </script>
+</body>
+
+</html>

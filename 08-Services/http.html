@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        th,td {
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="MainController as mask">
+        <table>
+            <thead>
+                <tr>
+                    <th>兒童口罩剩餘數</th>
+                    <th>成人口罩剩餘數</th>
+                    <th>醫事機構地址</th>
+                    <th>醫事機構電話</th>
+                </tr>
+            </thead>
+            <tbody ng-repeat="data in mask.data">
+                <tr>
+                    <td>{{data.properties.mask_child}}</td>
+                    <td>{{data.properties.mask_adult}}</td>
+                    <td>{{data.properties.address}}</td>
+                    <td>{{data.properties.phone}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var app = angular.module('app', []);
+        app.controller('MainController', ['$http', function ($http) {
+            var self = this;
+            let mask = 'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json'
+            // let cors = 'https://cors-anywhere.herokuapp.com/'
+            // let quality = 'https://quality.data.gov.tw/dq_download_json.php?nid=116285&md5_url=2150b333756e64325bdbc4a5fd45fad1'
+            self.url = mask
+
+            // $http({
+            //     method: 'GET',
+            //     url: self.url,
+            // }).then((res) => {
+            //     self.data = res.data.features
+            //     console.log(res.data.features);
+                
+            //     console.log('OK');
+            // }), function (res) {
+            //     console.error("response error");
+            // }
+
+             $http.get(self.url).then((res) => {
+                self.data = res.data.features
+                console.log(res.data.features);
+                
+                console.log('OK');
+            }), function (res) {
+                console.error("response error");
+            }
+
+        }])
+    </script>
+</body>
+
+</html>

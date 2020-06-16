@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .mid {
+            width: 500px;
+            margin: 0 auto 5px ;
+            border: 1px solid black;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mid" ng-controller="CopyController as copy">
+        <form novalidate class="simple-form">
+            名子： <input type="text" ng-model="copy.user.name"> 
+            <br>
+            性別： <input type="radio" ng-model="copy.user.gender" value="male">男
+            <input type="radio" ng-model="copy.user.gender" value="female">女
+            <br>
+            <button ng-click="copy.save(copy.user)">儲存</button>
+            <button ng-click="copy.reset()">復原</button>
+            <pre>form = {{copy.user | json}}</pre>
+            <pre>thesame = {{copy.thesame | json}} </pre>
+        </form>
+    </div>
+    <script>
+        var app = angular.module('app', [])
+
+        app.controller('CopyController', [function () {
+            var self = this;
+            self.thesame = {};
+            self.save = (user) => {
+                self.thesame = angular.copy(user);
+            }
+
+            self.reset = ()=>{
+                angular.copy(self.thesame,self.user);
+            }
+
+            self.reset();
+        }])
+    </script>
+</body>
+
+</html>

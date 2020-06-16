@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="FilterController as filter">
+        <div>
+            <span>search:</span><input type="text" ng-model="search">
+            <table class="friend">
+                <tr>
+                    <th>Name</th>
+                    <th>age</th>
+                </tr>
+                <tr ng-repeat="friend in friends | filter:search">
+                    <td>{{friend.name}}</td>
+                    <td>{{friend.age}}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('FilterController', ['$scope', function ($scope) {
+            $scope.friends = [{
+                name: 'john',
+                age: 10
+            },{
+                name: 'kevin',
+                age: 15
+            },{
+                name: 'Mary1',
+                age: 28
+            }]
+        }])
+    </script>
+</body>
+
+</html>

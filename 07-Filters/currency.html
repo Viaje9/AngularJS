@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div ng-controller="FilterController as filter">
+        <div>
+            Cost1 as currency：{{filter.Cost1}} <br>
+            Cost1 as currency：{{filter.Cost1 | currency}} <br>
+            Cost1 as currency：{{filter.Cost1 | currency:"NT":0}} <br>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('app',[]);
+
+        app.controller('FilterController',function(){
+            var self = this;
+            self.Cost1 = 1000;
+        })
+    </script>
+</body>
+</html>

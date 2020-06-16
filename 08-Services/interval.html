@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="MainController as Ctrl">
+        {{Ctrl.count}}
+        <button ng-click="Ctrl.stop()">STOP</button>
+    </div>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('MainController', ['$interval', function ($interval) {
+            var self = this;
+            self.count = 0;
+            self.counter = ()=> {
+                self.count++;
+            };
+            self.interval = $interval(self.counter,1000);
+
+            self.stop = ()=>{
+                $interval.cancel(self.interval);
+            }
+        }])
+    </script>
+</body>
+
+</html>

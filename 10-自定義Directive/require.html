@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.0/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <directive-hello></directive-hello>
+    
+    <script>
+        var app = angular.module('app',[]);
+
+        app.directive('directiveHello',function(){
+            return {
+                restrict: 'E',
+                template: '<directive-test></directive-test>',
+                controller: function(){
+                    this.hi = "Hello";
+                }
+            }
+        })
+
+        app.directive('directiveTest',function(){
+            return {
+                require: '^directiveHello',
+                restrict: 'E',
+                template: '<div>{{hello}}</div>',
+                link: function (scope,el,art,hello){
+                    scope.hello = hello.hi;
+                }
+            }
+        })
+
+    </script>
+</body>
+</html>

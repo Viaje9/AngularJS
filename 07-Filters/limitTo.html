@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="FilterController as filter">
+        <div>
+            <label>
+                Limit {{numbers}} to：
+                <input type="number" step="1" ng-model="numLimit" >
+                <p>Output numbers have begin：{{ numbers | limitTo:numLimit:2 }}</p>
+                <p>Output numbers：{{numbers |limitTo:numLimit}}</p>
+            </label>
+        </div>
+    </div>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('FilterController', ['$scope', function ($scope) {
+            $scope.numbers = [1, 2, 3, 4, 5, 6, 78, 9];
+        }])
+    </script>
+</body>
+
+</html>

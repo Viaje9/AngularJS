@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .area {
+            width: 500px;
+            margin: 0 auto 5px;
+            border: 1px solid black;
+        }
+
+        .ngEmail.ng-invalid-email {
+            outline: solid 1px red;
+            border: solid 1px red;
+        }
+
+        .ngEmail.ng-dirty.ng-valid-email {
+            outline: solid 1px green;
+            border: solid 1px green;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="area">
+        <h2>帳號驗證</h2>
+        <form name="form1" ng-submit="angular.ng-submit()">
+            帳號：
+            <input type="text" name="account" ng-model="accountData" ng-minlength="3" ng-maxlength="5" required>
+            <p>{{form1.account.$error}}</p>
+            <p>required：{{!!form1.account.$error.required}}</p>
+            <p>minlength：{{!!form1.account.$error.minlength}}</p>
+            <p>maxlength：{{!!form1.account.$error.maxlength}}</p>
+        </form>
+    </div>
+    <div class="area" >
+        <h2>Email驗證</h2>
+        <form name="form2">
+            E-mail：
+            <input class="ngEmail" type="email" name="email" ng-model="emailData" required/>
+            <span ng-show="form2.email.$error.email">E-mail格式錯誤</span>
+        </form>
+    </div>
+</body>
+</html>
