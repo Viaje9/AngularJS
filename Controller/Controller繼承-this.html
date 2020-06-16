@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="ParentController as parent">
+        this is {{parent.data}}
+        <br>
+        parent.data：
+        <input type="text" ng-model="parent.data">
+        <hr>
+        <div ng-controller="ChildController as child">
+            this is {{child.data}}
+            <br>
+            child.data：
+            <input type="text" ng-model="child.data">
+        </div>
+    </div>
+    <script>
+        (function () {
+            var app = angular.module('app', []);
+
+            app.controller('ParentController', [function () {
+                this.data = 'Parent';
+            }]);
+
+            app.controller('ChildController', [function () {
+
+            }]);
+        })()
+    </script>
+</body>
+
+</html>

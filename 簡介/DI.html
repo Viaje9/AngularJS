@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
+    <div ng-app="app" ng-controller="Controller"></div>
+    <script>
+        (function(){
+            var app = angular.module('app',[]);
+
+            app.service('WorldService',function(){
+                this.name ="world";
+            })
+
+            app.service('JackService',function(){
+                this.name ="Jack";
+            })
+
+            app.controller('Controller', ['WorldService',function(NameService){
+                console.log(NameService.name);
+            }])
+        })()
+    </script>
+</body>
+</html>

@@ -14,30 +14,18 @@
 </head>
 
 <body>
-    <div ng-controller="Controller as main">
-        {{main.sayHello()}}
-        <br>
-        {{main.sayHello('jase')}}
-        <br>
-        <input type="text" ng-model="main.data" ng-init="main.data=555">
-        <br>
-        {{main.data}}
-        <br>
-        {{main.test}}
-
+    <div ng-controller="bookController">
+        {{data}}
     </div>
     <script>
         (function () {
-            var app = angular.module('app', []);
+           var app = angular.module('app',['Controller','Directive','Filter','Service','book']);
 
-            app.controller('Controller', [function () {
-                this.sayHello = (name) => {
-                    return name || "world";
-                }
-                this.data = 123;
-                this.test = 123;
+           var controller = angular.module('Controller',[]);
+           var directive = angular.module('Directive',[])
+           var filter = angular.module('Filter',[])
+           var service = angular.module('Service',[])
 
-            }])
         })();
 
     </script>

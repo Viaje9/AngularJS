@@ -8,22 +8,23 @@
 </head>
 <body>
     <div ng-controller="MainController">
-        {{data('apple')}}
+        {{sayHello()}}
         <br>
-        <!-- <input type="text" ng-model="data()"> -->
+        {{sayHello("brian")}}
+        <br>
+        Hello, {{data}}
+        <br>
+        <input type="text" ng-model="data">
     </div>
     <script>
-        (function (){
+        (function(){
             var app = angular.module('app',[]);
 
             app.controller('MainController',['$scope',function($scope){
-                $scope.data = (name)=>{
-                    name = name || "world";
-
-                    return "hello, " + name;
-                };
+                $scope.data = "world";
+                $scope.sayHello = (name)=> name || "world";
             }])
-        })()
+        })()  
     </script>
 </body>
 </html>

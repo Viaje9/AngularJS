@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html ng-app="book">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div>
+        <div ng-controller="bookController">
+            {{data}}
+        </div>
+    </div>
+    <script>
+        (function () {
+            var book = angular.module('book', []);
+
+            book.controller('bookController', ['$scope', function ($scope) {
+                $scope.data = "this is book";
+            }]);
+
+        })()
+    </script>
+</body>
+
+</html>
