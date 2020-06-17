@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div ng-controller="myController">
+
+    </div>
+    <script>
+        var app = angular.module('app',[])
+
+        app.service('myService',function(){
+            this.name = "主角";
+            this.job = "戰士";
+            this.attack = function () {
+                console.log ('造成十點傷害');
+            }
+        })
+
+        app.factory('myFactory',function(){
+            var value = Math.random();
+
+            return {
+                name: "傑克",
+                job: "法師",
+                attack: function(){
+                    console.log("造成十點傷害");
+                }
+            } 
+        })
+
+        app.controller('myController',function(myService,myFactory){
+            this.character = myService;
+            this.partner = myFactory;
+            console.log(this.character,this.partner);
+            this.character.attack();
+            this.partner.attack();
+
+
+        })
+    </script>
+</body>
+</html>

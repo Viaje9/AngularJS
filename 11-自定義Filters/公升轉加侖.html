@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="FilterController as filter">
+        <input type="number" ng-model="filter.gal" min="0">
+        <span>
+            公升(L)={{filter.gal | galToL:true}}
+        </span>
+        <br>
+        <input type="number" ng-model="filter.L" min="0">
+        <span>
+            加侖(gal)={{filter.L | galToL}}
+        </span>
+
+    </div>
+
+    <script>
+        var app = angular.module('app', []);
+        app.controller('FilterController', function () {
+            var self = this;
+            self.gal = 0;
+            self.L = 0;
+        })
+        app.filter('galToL', ['$filter', function ($filter) {
+            return function (num, reversion) {
+                console.log(reversion);
+                
+                if (isNaN(num)) return;
+                num = num * 1;
+                var resultNum = 0;
+                var fn = 3.7854;
+                if (reversion) {
+                    resultNum = num / fn
+                } else {
+                    resultNum = num * fn
+                }
+
+                return $filter('number')(resultNum, 4) + ((reversion) ? '加侖(gal)' : '公升(L)');
+            }
+        }])
+    </script>
+</body>
+
+</html>

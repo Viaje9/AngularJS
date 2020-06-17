@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html ng-app="CRUD">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div class="container">
+        <div ng-controller="RoleController as role">
+            <div ng-controller="AbilityController as ability">
+
+                <!-- 預設 -->
+                <div ng-show="role.isList">
+                    <label for="searchName">搜索名子：</label>
+                    <input type="text" name="searchName" ng-model="role.searchObj.name">
+                    <button type="button" class="btn btn-default" ng-click="role.goNew(ability.init)">新增腳色</button>
+
+                    <table class="table">
+                        <tr>
+                            <th>#</th>
+                            <th>編號</th>
+                            <th>名稱</th>
+                            <th>能力值</th>
+                            <th>新增時間</th>
+                            <th></th>
+                            <th>西元轉民國</th>
+                        </tr>
+                        <tr ng-repeat="item in role.dataList | orderBy: 'id' | filter: role.searchObj track by item.id">
+                            <td> {{ $index+1 }} </td>
+                            <td> {{item.id}} </td>
+                            <td> {{item.name}} </td>
+                            <td>
+                                <div>力量：{{item.ability.strength}} </div>
+                                <div>體力：{{item.ability.vitality}} </div>
+                                <div>敏捷：{{item.ability.agility}} </div>
+                                <div>智慧：{{item.ability.wisdom}} </div>
+                            </td>
+                            <td> {{item.createdTime | date:'yyyy-MM-dd HH:mm:ss'}} </td>
+                            <td>
+                                <button type="button" class="btn btn-default"
+                                    ng-click="role.goEdit( item,ability.init)">修改</button>
+                                <button type="button" class="btn btn-default" ng-click="role.delete(item)">刪除</button>
+                            </td>
+                            <td>{{ item.createdTime | dateToRoc}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- 編輯模式 -->
+                <div ng-hide="role.isList">
+                    <form ng-submit="role.submit(ability.ability)">
+                        <div class="form-group">
+                            <label for="id">編號</label>
+                            <input type="text" class="form-control" ng-model="role.editData.id" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">名稱</label>
+                            <input type="text" class="form-control" ng-model="role.editData.name">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">能力值</label>
+                            <span>剩餘點數： {{ability.maxAbility}} </span>
+                            <div>
+                                <label for="id">力量</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="ability.ability.strength"
+                                        readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.plus('strength')">+</button>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.minus('strength')">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="id">體力</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="ability.ability.vitality"
+                                        readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.plus('vitality')">+</button>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.minus('vitality')">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="id">敏捷</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="ability.ability.agility" readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.plus('agility')">+</button>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.minus('agility')">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="id">智慧</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" ng-model="ability.ability.wisdom" readonly>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.plus('wisdom')">+</button>
+                                    </div>
+                                    <div class="input-group-btn">
+                                        <button type="button" class="btn btn-default"
+                                            ng-click="ability.minus('wisdom')">-</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="submit" class="btn btn-default"
+                            ng-disabled="!role.checkFrom(ability.checkAbilitySet)" value="儲存">
+                        <button type="button" class="btn btn-default" ng-click="role.backList()">返回</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+    <script>
+        var app = angular.module("CRUD", []);
+
+        app.filter('dateToRoc', function () {
+            return function (date) {
+                date = date.split('-')
+                date[2] = date[2].split('T')[0]
+                date[0] = (date[0] - 1911).toString();
+
+                return '民國' + date[0] + '年' + date[1] + '月' + date[2] + '日';
+            }
+        })
+
+        app.service('localStorageService', function () {
+            var self = this;
+
+            self.getProperty = function (propertyName) {
+                var result = localStorage.getItem(propertyName);
+                result = result || "[]";
+                return angular.fromJson(result);
+            }
+
+            self.setProperty = function (propertyName, value) {
+                localStorage.setItem(propertyName, angular.toJson(value));
+            }
+
+        })
+
+        app.controller('RoleController', ['localStorageService', function (localStorageService) {
+            var self = this;
+
+            var propertyName = 'roleList';
+            self.isList = true;
+            self.dataList = localStorageService.getProperty(propertyName);
+            self.editData = {};
+
+            //新增
+            self.goNew = function (init) {
+                self.isList = false;
+                self.editData = {};
+                init();
+            }
+
+            //編輯
+            self.goEdit = function (item, init) {
+                self.isList = false;
+                self.editData = angular.copy(item);
+                init(item.ability);
+            }
+
+            //刪除
+            self.delete = function (item) {
+                self.dataList.splice(self.dataList.indexOf(item), 1);
+                localStorageService.setProperty(propertyName, self.dataList);
+            }
+
+            //確認
+            self.submit = function (ability) {
+                var copy = angular.copy(self.editData);
+                console.log(ability);
+
+                copy.ability = ability;
+
+                if (copy.id) {  // 如果有則修改
+                    angular.forEach(self.dataList, function (value, key) {
+                        if (value.id === copy.id) {
+                            self.dataList[key] = copy
+                        }
+                    })
+                } else {  //如果沒有則新增
+                    var now = new Date();
+                    //id設為現在時間轉為毫秒
+                    copy.id = (now).getTime();
+                    //新增時間
+                    copy.createdTime = now;
+                    //將資料push在dataList
+                    self.dataList.push(copy);
+                }
+                //打開預設畫面
+                self.isList = true;
+                //清空編輯頁資料
+                self.editData = {};
+                //儲存至localStorage
+                localStorageService.setProperty(propertyName, self.dataList);
+            };
+
+
+            //返回
+            self.backList = function () {
+                self.isList = true;
+                self.editData = {};
+            }
+
+            self.checkFrom = function (checkAbilitySet) {
+                if (!self.editData.name)
+                    return false;
+
+                return checkAbilitySet();
+            }
+        }]);
+
+
+        app.controller('AbilityController', [function () {
+            var self = this;
+            var maxAbility = 50;
+            self.ability = {
+                strength: 0,
+                vitality: 0,
+                agility: 0,
+                wisdom: 0
+            };
+
+            self.init = function (value) {
+                value = value || {};
+                self.maxAbility = maxAbility;
+                self.ability = {
+                    strength: value.strength || 0,
+                    vitality: value.vitality || 0,
+                    agility: value.agility || 0,
+                    wisdom: value.wisdom || 0
+                };
+
+                self.maxAbility -= self.ability.strength;
+                self.maxAbility -= self.ability.vitality;
+                self.maxAbility -= self.ability.agility;
+                self.maxAbility -= self.ability.wisdom;
+
+            };
+
+            self.plus = function (propertyName) {
+
+                if (self.maxAbility > 0) {
+                    self.ability[propertyName]++;
+                    self.maxAbility--;
+                };
+            };
+
+            self.minus = function (propertyName) {
+
+                if (self.ability[propertyName] > 0) {
+                    self.ability[propertyName]--;
+                    self.maxAbility++
+                };
+            };
+
+            self.checkAbilitySet = function () {
+                if (self.maxAbility > 0)
+                    return false;
+
+                return true;
+            };
+
+        }])
+
+    </script>
+
+
+</body>
+
+</html>

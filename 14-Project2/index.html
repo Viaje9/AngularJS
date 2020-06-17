@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+        integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    <style>
+        th,td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="pull-left">
+            <!-- 1.7.0 href="#!/"-->
+            <a href="#!/createRole" class="btn btn-default">創造腳色</a>
+            <a href="#!/equip" class="btn btn-default">裝備與技能</a>
+            <a href="#!/fight" class="btn btn-default">魔王對戰</a>
+        </div>
+        <hr>
+        <div ng-view></div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+        integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+        crossorigin="anonymous"></script>
+
+    <script>
+        var app = angular.module('app', ['ngRoute']);
+
+        app.config(['$routeProvider', function ($routeProvider) {
+            $routeProvider
+                .when('/createRole', {
+                    templateUrl: 'createRole.html'
+                })
+                .when('/equip', {
+                    templateUrl: 'equip.html'
+                })
+                .when('/fight', {
+                    templateUrl: 'fight.html'
+                }).otherwise({
+                    redirectTo: '/'
+                });
+        }])
+    </script>
+
+    <script>
+        
+
+        app.service('LocalStorageService', function () {
+            var self = this;
+
+            self.getProperty = function (propertyName) {
+                var result = localStorage.getItem(propertyName);
+                result = result || "[]";
+                return angular.fromJson(result);
+            }
+
+            self.setProperty = function (propertyName, value) {
+                localStorage.setItem(propertyName, angular.toJson(value));
+            }
+
+        })
+
+        app.filter('keyToName', ['$filter', function ($filter) {
+            return function (key, array) {
+                var data = $filter('filter')(array, { key: key });
+                console.log(key,array);
+                
+                if (data.length > 0)
+                    return data[0].name;
+            }
+        }])
+
+        app.controller('RoleController', ['LocalStorageService', function (localStorageService) {
+            var self = this;
+
+            var propertyName = 'roleList';
+            self.isList = true;
+            self.dataList = localStorageService.getProperty(propertyName);
+            self.editData = {};
+
+            //新增
+            self.goNew = function (init) {
+                self.isList = false;
+                self.editData = {};
+                init();
+            }
+
+            //編輯
+            self.goEdit = function (item, init) {
+                self.isList = false;
+                self.editData = angular.copy(item);
+                init(item.ability);
+            }
+
+            //刪除
+            self.delete = function (item) {
+                self.dataList.splice(self.dataList.indexOf(item), 1);
+                localStorageService.setProperty(propertyName, self.dataList);
+            }
+
+            //確認
+            self.submit = function (ability) {
+                var copy = angular.copy(self.editData);
+                console.log(ability);
+
+                copy.ability = ability;
+
+                if (copy.id) {  // 如果有則修改
+                    angular.forEach(self.dataList, function (value, key) {
+                        if (value.id === copy.id) {
+                            self.dataList[key] = copy
+                        }
+                    })
+                } else {  //如果沒有則新增
+                    var now = new Date();
+                    //id設為現在時間轉為毫秒
+                    copy.id = (now).getTime();
+                    //新增時間
+                    copy.createdTime = now;
+                    //將資料push在dataList
+                    self.dataList.push(copy);
+                }
+                //打開預設畫面
+                self.isList = true;
+                //清空編輯頁資料
+                self.editData = {};
+                //儲存至localStorage
+                localStorageService.setProperty(propertyName, self.dataList);
+            };
+
+
+            //返回
+            self.backList = function () {
+                self.isList = true;
+                self.editData = {};
+            }
+
+            self.checkFrom = function (checkAbilitySet) {
+                if (!self.editData.name)
+                    return false;
+
+                return checkAbilitySet();
+            }
+        }]);
+
+
+        app.controller('AbilityController', [function () {
+            var self = this;
+            var maxAbility = 50;
+            self.ability = {
+                strength: 0,
+                vitality: 0,
+                agility: 0,
+                wisdom: 0
+            };
+
+            self.init = function (value) {
+                value = value || {};
+                self.maxAbility = maxAbility;
+                self.ability = {
+                    strength: value.strength || 0,
+                    vitality: value.vitality || 0,
+                    agility: value.agility || 0,
+                    wisdom: value.wisdom || 0
+                };
+
+                self.maxAbility -= self.ability.strength;
+                self.maxAbility -= self.ability.vitality;
+                self.maxAbility -= self.ability.agility;
+                self.maxAbility -= self.ability.wisdom;
+
+            };
+
+            self.plus = function (propertyName) {
+
+                if (self.maxAbility > 0) {
+                    self.ability[propertyName]++;
+                    self.maxAbility--;
+                };
+            };
+
+            self.minus = function (propertyName) {
+
+                if (self.ability[propertyName] > 0) {
+                    self.ability[propertyName]--;
+                    self.maxAbility++
+                };
+            };
+
+            self.checkAbilitySet = function () {
+                if (self.maxAbility > 0)
+                    return false;
+
+                return true;
+            };
+
+        }])
+
+
+        app.controller('CharacterController', ['$filter', 'LocalStorageService', function ($filter, LocalStorageService) {
+            var self = this;
+            var propertyName = "roleList";
+            self.isList = true;
+
+            //角色
+            self.characters = LocalStorageService.getProperty(propertyName);
+            console.log(self.characters);
+
+            //角色編輯備份
+            self.characterBack = {};
+            self.characterInfo = function (character) {
+                //編輯時先複製一份
+                self.characterBack = angular.copy(character);
+                //取消列表模式
+                self.isList = false;
+                self.tab = 1;
+            }
+
+            self.backToList = function () {
+                //清空編輯備份
+                self.characterBack = {};
+                //列表模式
+                self.isList = true;
+            }
+
+            self.save = function () {
+                //尋找ID相同的進行修改
+                angular.forEach(self.characters, function (value, key) {
+                    if (value.id === self.characterBack.id) {
+                        console.log('a');
+
+                        self.characters[key] = self.characterBack;
+                        LocalStorageService.setProperty(propertyName, self.characters);
+                        self.isList = true;
+                        return;
+                    }
+                })
+            }
+
+            //確認下一步是否可進行
+            self.checkNext = function (step) {
+                switch (step) {
+                    case 1:
+                        //判斷職業
+                        if (self.characterBack.job)
+                            return true;
+                        break;
+                    case 2:
+                        if (self.characterBack.weapon && self.characterBack.armor)
+                            return true;
+                        break;
+                    case 3:
+                        if (self.characterBack.skill)
+                            return true;
+                        break;
+                }
+            };
+
+            //TAB
+            self.tab = 1;
+
+            //設定現在的TAB
+            self.setTab = function (tab) {
+                self.tab = tab;
+            }
+            //確認現在的TAB
+            self.isTab = function (tab) {
+                return self.tab === tab;
+            }
+
+            //job
+            self.job = [
+                { name: '戰士', key: 1, skill: 'warrior', weapon: 'sword', armor: 'heavy' },
+                { name: '弓箭手', key: 2, skill: 'archer', weapon: 'bow', armor: 'medium' },
+                { name: '幻術師', key: 3, skill: 'mesmer', weapon: 'scepter', armor: 'light' }
+            ]
+
+
+            //weapon
+            self.weapon = [
+                { name: '短劍', key: 1, class: 'sword', data: { min: 1, max: 3 } },
+                { name: '長劍', key: 2, class: 'sword', data: { min: 3, max: 5 } },
+                { name: '雙手劍', key: 3, class: 'sword', data: { min: 5, max: 10 } },
+                { name: '黃金劍', key: 4, class: 'sword', data: { min: 10, max: 20 } },
+                { name: '短弓', key: 5, class: 'bow', data: { min: 1, max: 3 } },
+                { name: '長弓', key: 6, class: 'bow', data: { min: 3, max: 5 } },
+                { name: '努弓', key: 7, class: 'bow', data: { min: 5, max: 10 } },
+                { name: '黃金弓', key: 8, class: 'bow', data: { min: 10, max: 20 } },
+                { name: '短杖', key: 9, class: 'scepter', data: { min: 1, max: 3 } },
+                { name: '長杖', key: 10, class: 'scepter', data: { min: 3, max: 5 } },
+                { name: '火焰杖', key: 11, class: 'scepter', data: { min: 5, max: 10 } },
+                { name: '黃杖', key: 12, class: 'scepter', data: { min: 10, max: 20 } }
+            ]
+
+            //armor
+            self.armor = [
+                { name: '布袍', key: 1, class: 'light', data: { value: 20 } },
+                { name: '法袍', key: 2, class: 'light', data: { value: 30 } },
+                { name: '神聖法袍', key: 3, class: 'light', data: { value: 40 } },
+                { name: '布甲', key: 4, class: 'medium', data: { value: 40 } },
+                { name: '皮甲', key: 5, class: 'medium', data: { value: 50 } },
+                { name: '硬皮盔甲', key: 6, class: 'medium', data: { value: 60 } },
+                { name: '骨甲', key: 7, class: 'heavy', data: { value: 60 } },
+                { name: '鎖甲', key: 8, class: 'heavy', data: { value: 70 } },
+                { name: '鏈甲', key: 9, class: 'heavy', data: { value: 80 } },
+            ]
+
+            //skill
+            self.skill = [
+                { name: '重砍', key: 1, class: 'warrior', data: { min: 50, max: 80 } },
+                { name: '穿刺射擊', key: 2, class: 'archer', data: { min: 30, max: 100 } },
+                { name: '心靈震盪', key: 3, class: 'mesmer', data: { min: 60, max: 70 } }
+            ];
+
+            self.checkJob = function () {
+                delete self.characterBack.weapon;
+                delete self.characterBack.armor;
+                delete self.characterBack.skill;
+            }
+
+            self.checkItem = function (job, attr) {
+                var data = self.filterJob(job);
+                if (data)
+                    return data[attr];
+                else
+                    return null
+            }
+
+            //篩選職業
+
+            self.filterJob = function (job) {
+                job = job || ' ';
+                var job = $filter('filter')(self.job, { key: job });
+                if (job.length > 0)
+                    return job[0];
+                else
+                    return null;
+            }
+        }])
+
+        app.controller('GameController', ['$filter', 'LocalStorageService', function ($filter, LocalStorageService) {
+            var self = this;
+            //載入腳色
+            var propertyName = 'roleList';
+            self.characters = LocalStorageService.getProperty(propertyName);
+            console.log(self.characters);
+
+            //選擇的腳色
+            self.fighter = {};
+            //顯示是否為選擇腳色
+            self.checked = function (character) {
+                return self.fighter.id === character.id
+            }
+
+            self.boss = { name: "魔王", hp: 10000, skill: 999, atk: { min: 80, max: 120 }, def: { value: 40 }, special: { min: 150, max: 250 } };
+            //備份魔王　重製的時候使用
+            self.bossBack = angular.copy(self.boss);
+
+            // 選擇較技計算能力值
+            self.chooseFighter = function (character) {
+                console.log(character);
+
+                if (character.job) {
+                    self.fighter = angular.copy(character);
+                    self.fighter.hp = self.fighter.ability.vitality * 100;
+                    var atk = $filter('filter')(self.weapon, { key: self.fighter.weapon })[0].data;
+                    self.fighter.atk = {};
+                    self.fighter.def = $filter('filter')(self.armor, { key: self.fighter.armor })[0].data;
+                    var special = $filter('filter')(self.skill, { key: self.fighter.skill })[0].data;
+                    self.fighter.special = {};
+
+                    switch (self.fighter.job) {
+                        case 1:
+                            self.fighter.atk.min = atk.min * self.fighter.ability.strength;
+                            self.fighter.atk.max = atk.max * self.fighter.ability.strength;
+                            self.fighter.special.min = special.min * self.fighter.ability.strength;
+                            self.fighter.special.max = special.max * self.fighter.ability.strength;
+                            break;
+                        case 2:
+                            self.fighter.atk.min = atk.min * self.fighter.ability.agility;
+                            self.fighter.atk.max = atk.max * self.fighter.ability.agility;
+                            self.fighter.special.min = special.min * self.fighter.ability.agility;
+                            self.fighter.special.max = special.max * self.fighter.ability.agility;
+                            break;
+                        case 3:
+                            self.fighter.atk.min = atk.min * self.fighter.ability.wisdom;
+                            self.fighter.atk.max = atk.max * self.fighter.ability.wisdom;
+                            self.fighter.special.min = special.min * self.fighter.ability.wisdom;
+                            self.fighter.special.max = special.max * self.fighter.ability.wisdom;
+                            break;
+                    }
+                } else {
+                    alert('還未設定職業')
+                }
+            };
+
+            self.isBattle = false;
+            self.battle = function () {
+                if (self.fighter.id) {
+                    self.isBattle = true;
+                    //清空對戰消息
+                    self.fightText = [];
+                } else {
+                    alert('請選擇腳色');
+                }
+            }
+
+            self.fightText = [];
+            self.isDead = false;
+            self.fight = function (atk, character) {
+                var name = character.name;
+                var isAttacked = self.fighter;
+                if (character.id)
+                    isAttacked = self.boss;
+                if (atk === 0) {
+                    var attack = self.checkAtk(character.atk, isAttacked);
+                    self.fightText.push({ text: `${name}使用：普通攻擊，對${isAttacked.name}造成：${attack}` });
+                    isAttacked.hp -= attack;
+                } else {
+                    var attack = self.checkAtk(character.special, isAttacked);
+                    var skillName = $filter('keyToName')(character.skill, self.skill)
+                    self.fightText.push({ text: `${name}使用：${skillName}，對${isAttacked.name}造成：${attack}` });
+                    isAttacked.hp -= attack;
+                }
+                if (character.id)
+                    self.checkBoss();
+                else
+                    self.checkFighter();
+            }
+
+            self.reFight = function () {
+                self.isBattle = false;
+                self.isDead = false;
+                self.boss = angular.copy(self.bossBack);
+                self.fighter = {};
+            }
+
+            self.checkBoss = function () {
+                if (self.boss.hp > 0) {
+                    self.fight(Math.floor(Math.random() * 2), self.boss);
+                } else {
+                    self.fightText.push({ text: '魔王被擊倒' });
+                    self.isDead = true;
+                }
+            }
+
+            self.checkFighter = function () {
+                if (self.fighter.hp <= 0)
+                    self.isDead = true;
+            }
+
+            self.checkAtk = function (atk, character) {
+                var random = Math.floor(Math.random() * (atk.max - atk.min + 1));
+                var total = atk.max - random;
+                total = total - character.def.value;
+                total = total > 0 ? total : 0;
+                return total;
+            }
+        }])
+    </script>
+
+</body>
+
+</html>

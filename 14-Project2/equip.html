@@ -1,0 +1,78 @@
+<html>
+<body>
+    <div class="container">
+        <div ng-controller="CharacterController as character">
+            <!--列表模式就顯示-->
+            <table class="table table-hover" ng-show="character.isList">
+                <tr>
+                    <td>#</td>
+                    <td>名稱</td>
+                    <td>功能</td>
+                </tr>
+                <tr ng-repeat="item in character.characters">
+                    <td>{{$index+1}}</td>
+                    <td>{{item.name}}</td>
+                    <td>
+                        <!--點選進入角色資訊模式-->
+                        <a class="btn btn-info" ng-click="character.characterInfo(item)">角色資訊</a>
+                    </td>
+                </tr>
+            </table>
+            <div ng-hide="character.isList">
+                <ul class="nav nav-pills">
+                    <li ng-click="character.setTab(1)" ng-class="{active:character.isTab(1)}">
+                        <a>職業</a>
+                    </li>
+                    <!--當有選職業才出現裝備-->
+                    <li ng-click="character.setTab(2)" ng-show="character.checkNext(1)"
+                        ng-class="{active:character.isTab(2)}">
+                        <a>裝備</a>
+                    </li>
+                    <!--當有裝備才出現技能-->
+                    <li ng-click="character.setTab(3)" ng-show="character.checkNext(2)"
+                        ng-class="{active:character.isTab(3)}">
+                        <a>技能</a>
+                    </li>
+                </ul>
+                <div ng-if="character.isTab(1)">
+                    <!--顯示職業-->
+                    <select class="form-control" ng-model="character.characterBack.job"
+                        ng-options="e.key as e.name for e in character.job" ng-change="character.checkJob()">
+                        <option value="">--請選擇職業--</option>
+                    </select>
+                    <!--有選職業才出現下一步-->
+                    <a class="btn btn-primary" ng-show="character.checkNext(1)" ng-click="character.setTab(2)">下一步</a>
+                </div>
+                <div ng-if="character.isTab(2)">
+                    <!--顯示武器-->
+                    <select class="form-control" ng-model="character.characterBack.weapon"
+                        ng-options="e.key as e.name for e in character.weapon | filter:{class:character.checkItem(character.characterBack.job,'weapon')}">
+                        <option value="">--請選擇武器--</option>
+                    </select>
+                    <!--顯示裝備-->
+                    <select class="form-control" ng-model="character.characterBack.armor"
+                        ng-options="e.key as e.name for e in character.armor | filter:{class:character.checkItem(character.characterBack.job,'armor')}">
+                        <option value="">--請選擇裝備--</option>
+                    </select>
+                    <!--有穿裝備才出現下一步-->
+                    <a class="btn btn-primary" ng-show="character.checkNext(2)" ng-click="character.setTab(3)">下一步</a>
+                </div>
+                <div ng-if="character.isTab(3)">
+                    <!--顯示技能-->
+                    <select class="form-control" ng-model="character.characterBack.skill"
+                        ng-options="e.key as e.name for e in character.skill | filter:{class:character.checkItem(character.characterBack.job,'skill')}">
+                        <option value="">--請選擇技能--</option>
+                    </select>
+                    <!--有選技能才出現儲存-->
+                    <a class="btn btn-success" ng-show="character.checkNext(3)" ng-click="character.save()">儲存</a>
+                </div>
+                <br />
+                <a class="btn btn-default" ng-click="character.backToList()">回到選單</a>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+
+</html>

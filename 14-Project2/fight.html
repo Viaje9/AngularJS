@@ -1,0 +1,49 @@
+<html>
+<body>
+    <div class="container">
+        <div ng-controller="GameController as game">
+            <!--選擇角色-->
+            <table class="table" ng-hide="game.isBattle">
+                <tr>
+                    <th>角色名稱</th>
+                    <th>職業</th>
+                    <th>功能</th>
+                    <th></th>
+                </tr>
+                <tr ng-repeat="character in game.characters" ng-class="{'success':game.checked(character)}">
+                    <td>{{character.name}}</td>
+                    <td>{{character.job | keyToName:character.job}}</td>
+                    <td>
+                        <a class="btn btn-primary" ng-click="game.chooseFighter(character)">選擇</a>
+                    </td>
+                    <!-- <td>{{ character.job }}</td> -->
+                </tr>
+            </table>
+            <!--開始對戰就隱藏按鈕-->
+            <a class="btn btn-warning" ng-click="game.battle()" ng-hide="game.isBattle">與魔王對戰</a>
+            <div ng-show="game.isBattle">
+                <div class="col-xs-3">
+                    英雄 : {{game.fighter.name}}
+                    <br />
+                    血量 : {{game.fighter.hp}}
+                    <br />
+                    <!--角色或魔王死亡就隱藏-->
+                    <a class="btn btn-default" ng-hide="game.isDead" ng-click="game.fight(0,game.fighter)">攻擊</a>
+                    <a class="btn btn-default" ng-hide="game.isDead" ng-click="game.fight(1,game.fighter)">特殊技能</a>
+
+                </div>
+                <div class="col-xs-6">
+                    <!--角色或魔王死亡就顯示-->
+                    <a class="btn btn-danger" ng-show="game.isDead" ng-click="game.reFight()">重新挑戰</a>
+                    <p ng-repeat='text in game.fightText'>{{text.text}}</p>
+                </div>
+                <div class="col-xs-3">
+                    最終 : {{game.boss.name}}
+                    <br />
+                    血量 : {{game.boss.hp}}
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

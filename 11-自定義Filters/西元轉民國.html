@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-controller="FilterController as filter">
+        請輸入日期：
+        <input type="date" ng-model="filter.date">
+        <div>
+            輸入的日期：{{filter.date|date:"yyyy/MM/dd"}}
+        </div>
+        輸入的日期：{{filter.date| dateToRoc}}
+    </div>
+    <script>
+        var app = angular.module('app', []);
+
+        app.controller('FilterController', [function () {
+            this.date = new Date;
+        }])
+
+        app.filter('dateToRoc', function () {
+            return function (date) {
+                var Year = (date.getFullYear() - 1911).toString();
+
+                var Month = (date.getMonth() + 1).toString();
+
+                var Day = date.getDate().toString();
+
+                return '民國' + Year + '年' + Month + '月' + Day + '日';
+            }
+        })
+    </script>
+</body>
+
+</html>
