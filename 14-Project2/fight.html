@@ -10,13 +10,12 @@
                     <th>功能</th>
                     <th></th>
                 </tr>
-                <tr ng-repeat="character in game.characters" ng-class="{'success':game.checked(character)}">
+                <tr ng-repeat="character in game.characters " ng-class="{'success':game.checked(character)}">
                     <td>{{character.name}}</td>
-                    <td>{{character.job | keyToName:character.job}}</td>
+                    <td>{{character.job | keyToName:game.job}}</td>
                     <td>
                         <a class="btn btn-primary" ng-click="game.chooseFighter(character)">選擇</a>
                     </td>
-                    <!-- <td>{{ character.job }}</td> -->
                 </tr>
             </table>
             <!--開始對戰就隱藏按鈕-->
