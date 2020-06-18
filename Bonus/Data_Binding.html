@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Data model</h2>
+    <p>從資料產生UI</p>
+    <button id='clear' onclick='clearAll()'>Clear All</button> 
+    <div id="todo-list"></div>
+    <input id="add" type="text">
+    <button id='addBtn' onclick='addTodo()'>Add List</button> 
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script>
+        var todos = [
+            { text: 'Exercise.' },
+            { text: 'Learn JavaScript.' },
+            { text: 'Write a blog.' },
+            { text: 'Write a blog.' }
+        ];
+
+        function renderTodoList() {
+            $('#todo-list').empty();
+
+            todos.map(function (el) {
+                $('#todo-list').append(new $('<li>' + el.text + '</li>'))
+            })
+        }
+
+        renderTodoList();
+    </script>
+    
+    <script> 
+        function addTodo() { 
+            // todos = []; 
+            let list = $('#add').val();
+            todos.push({text:`${list}`});
+            $('#add').val('');
+            renderTodoList(); 
+        } 
+
+        function clearAll() { 
+            todos = []; 
+            renderTodoList(); 
+        } 
+    </script>
+</body>
+
+</html>

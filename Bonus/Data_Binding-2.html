@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Data model</h2>
+    <p>UI產生資料</p>
+    <ul id='todo-list'>
+        <li>Exercise</li>
+        <li>Learn JavaScript</li>
+        <li>Write a blog</li>
+    </ul>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+
+    <script>
+        var todos = [];
+
+        function generateDataModel() {
+            todos = [];
+            $('#todo-list li').each(function (i, el) {
+                todos.push({ text: el.innerText });
+            })
+        }
+
+        generateDataModel(); 
+    </script>
+
+    <button id='clear' onclick='clearAllTodo()'>Clear all</button>
+    <script>
+        function clearAllTodo() {
+            $('#todo-list').empty();
+
+            generateDataModel();
+        } 
+    </script>
+</body>
+
+</html>
