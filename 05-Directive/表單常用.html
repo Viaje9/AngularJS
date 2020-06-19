@@ -82,6 +82,13 @@
             <p ng-repeat="item in angular.items"></p>
         </div>
     </div>
+    <div class="marginAuto">
+        <div ng-controller="AngularController as angular">
+           <ul>
+               <li ng-repeat="item in angular.options"></li>
+           </ul>
+        </div>
+    </div>
     <script>
         var app = angular.module('app', []);
 

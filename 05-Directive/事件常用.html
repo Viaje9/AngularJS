@@ -20,6 +20,10 @@
 </head>
 
 <body>
+  <div class="marginAuto">
+    {{test}} <br>
+    <input type="text" ng-model='test'>
+  </div>
   <div class="marginAuto" ng-controller="AngularController as angular">
     <h2>ng-change</h2>
     <label>請輸入</label>
@@ -39,6 +43,15 @@
     <p ng-mouseover="angular.mouseOver=true" ng-mouseleave="angular.mouseOver=false">滑鼠移動至此</p>
     <p ng-show="angular.mouseOver">你看的到我</p>
   </div>
+  <div class="marginAuto">
+    <div ng-controller="AngularController as angular">
+      <ul>
+        <li ng-repeat="item in angular.options">
+          {{item.type}}
+        </li>
+      </ul>
+    </div>
+  </div>
   <script>
     var app = angular.module('app', []);
 
@@ -47,6 +60,25 @@
       this.count = () => {
         this.result = this.num * 2;
       }
+
+
+      this.options = [{
+        type: '武器',
+        name: '木劍',
+        price: 300
+      }, {
+        type: '武器',
+        name: '鐵劍',
+        price: 800
+      }, {
+        type: '盔甲',
+        name: '木盔甲',
+        price: 1500
+      }, {
+        type: '盔甲',
+        name: '鐵盔甲',
+        price: 3500
+      }]
     });
 
     app.controller('ClickController', function () {
@@ -59,7 +91,7 @@
       }
     });
 
-    app.controller('MouseController', function() {
+    app.controller('MouseController', function () {
       this.mouseOver = false;
     })
 

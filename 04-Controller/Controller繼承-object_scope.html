@@ -8,16 +8,16 @@
 </head>
 <body>
     <div ng-controller="ParentController">
-        this is {{object.data}}
+        this is {{obj.data}}
         <br>
         Parent：
-        <input type="text" ng-model="object.data">
+        <input type="text" ng-model="obj.data">
         <hr>
         <div ng-controller="ChildController">
-            this is {{object.data}}
+            this is {{obj.data}}
             <br>
             Child：
-            <input type="text" ng-model="object.data">
+            <input type="text" ng-model="obj.data">
         </div>
     </div>
     <script>
@@ -25,12 +25,12 @@
             var app = angular.module('app',[]);
 
             app.controller('ParentController',['$scope',function($scope){
-                $scope.object = {};
-                $scope.object.data = "parent";
+                $scope.obj = {};
+                $scope.obj.data = "parent";
             }]);
 
             app.controller('ChildController',['$scope',function($scope){
-                // $scope.data = "child";
+                
             }]);
         })()
     </script>

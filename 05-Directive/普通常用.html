@@ -31,6 +31,9 @@
             width: 200px;
             border: 1px solid #000;
         }
+        .hello {
+            color: green;
+        }
     </style>
 </head>
 <body>
@@ -56,8 +59,12 @@
 
     <div class="marginAuto" ng-controller="AngularController as angular">
         <h2>ng-class1</h2>
-        <div ng-class="{true: 'red', false:'blue'}[angular.isTrue]">紅</div>
+        <div ng-class="{true: 'red', false:'blue' ,test:'hello'}[angular.isTrue]">紅</div>
         <div ng-class="{true: 'red', false:'blue'}[angular.isFalse]">藍</div>
+
+        <button ng-click="angular.test1()">test1</button>
+        <button ng-click="angular.test2()">test2</button>
+
     </div>
 
     <div class="marginAuto" ng-controller="AngularController as angular">
@@ -85,6 +92,7 @@
         <span>勾選方塊</span><input type="checkbox" ng-model="checked">
         <div ng-if="checked">aaa</div>
     </div>
+    
     <script>
         var app = angular.module('app',[]);
 
@@ -111,6 +119,14 @@
         app.controller('AngularController', function(){
             this.isTrue = true;
             this.isFalse = false;
+
+            this.test1 = ()=>{
+                this.isTrue = "test";
+            }
+
+            this.test2 = ()=>{
+                this.isTrue = true;
+            }
         })
     </script>
 </body>

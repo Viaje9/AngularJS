@@ -1,34 +1,44 @@
 <!DOCTYPE html>
 <html ng-app="app">
+
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.9/angular.min.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+
 <body>
     <div ng-controller="Child1Controller">
-        {{data}}
-        <input type="text" ng-model='data'>
+        this is {{obj.data}} <br>
+        Child1:
+        <input type="text" ng-model='obj.data'>
     </div>
     <div ng-controller="Child2Controller">
-        {{data}}
-        <input type="text" ng-model='data'>
+        this is {{obj.data}} <br>
+        Child2:
+        <input type="text" ng-model='obj.data'>
     </div>
     <script>
-        (function (){
-            var app = angular.module('app',[]);
+        (function () {
+            var app = angular.module('app', []);
 
-            app.controller('Child1Controller',['$rootScope',function($rootScope){
-                $rootScope.data = "Child1";
+            app.service('Data',['$rootScope',function($rootScope){
+                $rootScope.obj = {};
+                $rootScope.obj.data = "Root";
+            }])
+
+            app.controller('Child1Controller', function (Data) {
                 
-            }]);
 
-            app.controller('Child2Controller',['$rootScope',function($rootScope){
-                $rootScope.data = "Child2";
+            });
 
-            }]);
+            app.controller('Child2Controller',function (Data) {
+
+
+            });
         })()
     </script>
 </body>
+
 </html>
