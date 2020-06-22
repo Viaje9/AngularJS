@@ -84,8 +84,6 @@
                     redirectTo: '/'
                 });
         }])
-        console.log(!angular.isDefined() == !!undefined);
-
         app.controller('InboxMailController', ['$scope', '$http', function ($scope, $http) {
             let url = 'https://next.json-generator.com/api/json/get/VJ3-lwHa_';
             $http.get(url).then((res) => {
@@ -100,35 +98,34 @@
             }
 
             $scope.search = () => {
+
                 $scope.data = $scope.origData.filter((item) => {
                     let a, b, c
 
-                   
-                    a=($scope.Sender && item.Sender.toString() == $scope.Sender ) || ! $scope.Sender;
-                    
-                    
-                    
-                    // $scope.Sender == "" || $scope.Sender==undefined ? a = true : a = (item.Sender.toString() == $scope.Sender)
-                    $scope.Subject == "" || !angular.isDefined($scope.Subject) ? b = true : b = (item.Subject.toString() == $scope.Subject)
+                    //如果$scope.Sender是空字串會被轉換成false
+                    a = ($scope.Sender && item.Sender == $scope.Sender) || !$scope.Sender;
 
-                    
-                    if ($scope.searchDate == '1' || !angular.isDefined($scope.searchDate)) c = true
-                    else {
+                    b = ($scope.Subject && item.Subject == $scope.Subject) || !$scope.Subject;
+
+                    c = !$scope.searchDate || function () {
                         switch ($scope.searchDate) {
+                            case '1':
+                                return true;
+                                break;
                             case '2':
-                                (dayjs().valueOf() - 86400000) < item.SendDate ? c = true : c = false
+                                if ((dayjs().valueOf() - 86400000) < item.SendDate) return true
                                 break;
                             case '3':
-                                (dayjs().valueOf() - 86400000 * 2) < item.SendDate ? c = true : c = false
+                                if ((dayjs().valueOf() - 86400000 * 2) < item.SendDate) return true
                                 break;
                             case '4':
-                                (dayjs().valueOf() - 86400000 * 7) < item.SendDate ? c = true : c = false
+                                if ((dayjs().valueOf() - 86400000 * 7) < item.SendDate) return true
                                 break;
                             case '5':
-                                (dayjs().valueOf() - 86400000 * 30) < item.SendDate ? c = true : c = false
+                                if ((dayjs().valueOf() - 86400000 * 30) < item.SendDate) return true
                                 break;
                         }
-                    }
+                    }()
 
                     return a && b && c
                 })
@@ -155,37 +152,38 @@
                 $scope.data = $scope.origData.filter((item) => {
                     let a, b, c, d
 
-                    if ($scope.recipient == "" || !angular.isDefined($scope.recipient)) a = true
-                    else {
+                    a = !$scope.Recievers || function () {
                         for (let i in item.Recievers) {
-                            if (item.Recievers[i] == $scope.recipient) {
-                                a = true
+                            if (item.Recievers[i] == $scope.Recievers) {
+                                return true;
                                 break;
-                            } else {
-                                a = false
                             }
                         }
-                    }
-                    $scope.Sender == "" || !angular.isDefined($scope.Sender) ? b = true : b = (item.Sender.toString() == $scope.Sender);
-                    $scope.title == "" || !angular.isDefined($scope.title) ? c = true : c = (item.Subject.toString() == $scope.title);
+                    }()
 
-                    if ($scope.searchDate == '1' || !angular.isDefined($scope.searchDate)) d = true
-                    else {
+                    b = !$scope.Sender || item.Sender == $scope.Sender
+
+                    c = !$scope.Subject || item.Subject == $scope.Subject
+
+                    d = !$scope.searchDate || function () {
                         switch ($scope.searchDate) {
+                            case '1':
+                                return true;
+                                break;
                             case '2':
-                                (dayjs().valueOf() - 86400000) < item.SendDate ? d = true : d = false
+                                if ((dayjs().valueOf() - 86400000) < item.SendDate) return true
                                 break;
                             case '3':
-                                (dayjs().valueOf() - 86400000 * 2) < item.SendDate ? d = true : d = false
+                                if ((dayjs().valueOf() - 86400000 * 2) < item.SendDate) return true
                                 break;
                             case '4':
-                                (dayjs().valueOf() - 86400000 * 7) < item.SendDate ? d = true : d = false
+                                if ((dayjs().valueOf() - 86400000 * 7) < item.SendDate) return true
                                 break;
                             case '5':
-                                (dayjs().valueOf() - 86400000 * 30) < item.SendDate ? d = true : d = false
+                                if ((dayjs().valueOf() - 86400000 * 30) < item.SendDate) return true
                                 break;
                         }
-                    }
+                    }()
 
                     return a && b && c && d
                 })

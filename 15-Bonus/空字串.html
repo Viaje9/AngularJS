@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id="test" type="text">
+    <button onclick="test()">送出</button>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js'></script>
+    <script>
+        function test() {
+            let v = $("#test").val()
+            console.log("v=true:", v==true,", v=false:", v==false );
+        }
+    </script>
+</body>
+</html>
