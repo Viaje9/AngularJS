@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div ng-controller="Controller">
+        <input type="text" ng-model="in">
+        <button ng-click="go()">click</button>
+        <!-- <input type="text" ng-model="test"> -->
+        <div ng-view></div>
+        {{test}}
+    </div>
+    <script>
+        var app = angular.module("app",['ngRoute'])
+
+        app.config(['$routeProvider', function ($routeProvider) {
+            $routeProvider
+                .when('/home/:message', {
+                    templateUrl: '123.html',
+                    controller: 'Controller'
+                })
+                .otherwise({
+                    redirectTo: '/'
+                });
+        }])
+
+
+        app.controller("Controller",["$scope","$location","$routeParams",function($scope,$location,$routeParams){
+            $scope.go = ()=>{
+                // console.log(123);
+                // let test = {123:132}
+                // $location.search(test)
+                
+                console.log($routeParams);
+                
+            }
+
+
+
+            
+        }])
+    </script>
+</body>
+</html>

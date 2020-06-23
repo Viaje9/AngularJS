@@ -69,6 +69,9 @@
         dayjs.locale('zh-cn')
         var app = angular.module('app', ['ngRoute']);
 
+
+
+        
         app.config(['$routeProvider', function ($routeProvider) {
             $routeProvider
                 .when('/', {
@@ -84,6 +87,10 @@
                     redirectTo: '/'
                 });
         }])
+
+
+
+
         console.log(!angular.isDefined() == !!undefined);
 
         app.controller('InboxMailController', ['$scope', '$http', function ($scope, $http) {

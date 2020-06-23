@@ -85,24 +85,26 @@
                 });
         }])
 
-        app.controller('InboxMailController', ['$scope', '$http','$location', function ($scope, $http,$location) {
-            let url = 'https://next.json-generator.com/api/json/get/VJ3-lwHa_';
 
+
+        app.controller('InboxMailController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
+            let url = 'https://next.json-generator.com/api/json/get/VJ3-lwHa_';
+            $scope.searchObj = { "Sender": true, "Subject": true, "searchDate": true }
             $scope.dateNum = [{
-                number:1,
-                range:"全部"
-            },{
-                number:2,
-                range:"今天"
-            },{
-                number:3,
-                range:"昨天"
-            },{
-                number:4,
-                range:"近7日"
-            },{
-                number:5,
-                range:"近30日"
+                number: 1,
+                range: "全部"
+            }, {
+                number: 2,
+                range: "今天"
+            }, {
+                number: 3,
+                range: "昨天"
+            }, {
+                number: 4,
+                range: "近7日"
+            }, {
+                number: 5,
+                range: "近30日"
             },]
 
             $scope.searchDate = $scope.dateNum[0].number
@@ -114,36 +116,35 @@
                     return el
                 });
                 $scope.data = $scope.origData
+
             }), function (res) {
                 console.error("response error");
             }
-  
-            $scope.search = () => {
-                
+
+            //如果url帶參數
+            if (Object.keys($location.search()).length > 0) {
+                $scope.searchObj = $location.search()
+                for (let i in $scope.searchObj) {
+                    if ($scope.searchObj[i] == "") $scope.searchObj[i] = true;
+                }
+
                 $scope.data = $scope.origData.filter((item) => {
-                    let searchAry = [$scope.Sender, $scope.Subject, $scope.searchDate]
 
-                    searchAry = searchAry.map((item) => {
-                        if (item == undefined || item == "") item = true;
+                    $scope.searchObj.Sender = function () {
+                        if ($scope.searchObj.Sender == item.Sender) return true
 
-                        return item;
-                    })
-
-                    searchAry[0] = function () {
-                        if ($scope.Sender == item.Sender) return true
-
-                        return searchAry[0]
+                        return $scope.searchObj.Sender
                     }()
 
-                    searchAry[1] = function () {
-                        if ($scope.Subject == item.Subject) return true
+                    $scope.searchObj.Subject = function () {
+                        if ($scope.searchObj.Subject == item.Subject) return true
 
-                        return searchAry[1]
+                        return $scope.searchObj.Subject
                     }()
 
-                    searchAry[2] = function () {
-                        if ($scope.searchDate) {
-                            switch ($scope.searchDate) {
+                    $scope.searchObj.searchDate = function () {
+                        if ($scope.searchObj.searchDate) {
+                            switch ($scope.searchObj.searchDate) {
                                 case 1:
                                     return true
                                     break;
@@ -162,33 +163,51 @@
                             }
                         }
 
-                        return searchAry[2]
+                        return $scope.searchObj.searchDate
                     }()
 
-                    return searchAry.every((item) => item === true)
+                    return
                 })
             }
 
+            // function GetFilter (){
+            //     $scope.origData.filter((item)=>true)
+            // }
+
+            $scope.searchList = () => {
+                $scope.searchObj = { "Sender": $scope.Sender, "Subject": $scope.Subject, "searchDate": $scope.searchDate }
+
+                //防止沒有key值
+                for (let i in $scope.searchObj) {
+                    if ($scope.searchObj[i] == undefined) $scope.searchObj[i] = "";
+                }
+                $location.search($scope.searchObj)
+            }
+
+
+
         }])
 
-        app.controller('SentboxMailController', ['$scope', '$http', function ($scope, $http) {
+        app.controller('SentboxMailController', ['$scope', '$http', '$location', function ($scope, $http, $location) {
             let url = 'https://next.json-generator.com/api/json/get/4y0gZPBTd';
 
+            $location.search('aaaa', 'yipee');
+
             $scope.dateNum = [{
-                number:1,
-                range:"全部"
-            },{
-                number:2,
-                range:"今天"
-            },{
-                number:3,
-                range:"昨天"
-            },{
-                number:4,
-                range:"近7日"
-            },{
-                number:5,
-                range:"近30日"
+                number: 1,
+                range: "全部"
+            }, {
+                number: 2,
+                range: "今天"
+            }, {
+                number: 3,
+                range: "昨天"
+            }, {
+                number: 4,
+                range: "近7日"
+            }, {
+                number: 5,
+                range: "近30日"
             },]
 
             $scope.searchDate = $scope.dateNum[0].number
@@ -227,7 +246,7 @@
                             }
                         }
 
-                        return searchAry[0] 
+                        return searchAry[0]
                     }()
 
                     searchAry[1] = function () {
@@ -267,7 +286,7 @@
                     }()
 
                     //every判斷是否皆===true
-                    return searchAry.every((item) => item === true)
+                    return $scope.searchObj.every((item) => item === true)
                 })
             }
         }])

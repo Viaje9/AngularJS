@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html ng-app="app">
+
+<head>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.9/angular.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js'></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        ul {
+            margin: 20px 0;
+            display: flex;
+            list-style-type: none;
+            margin-left: auto;
+        }
+
+        input {
+            width: 150px;
+        }
+
+        li {
+            margin: 0 5px;
+        }
+
+        .search {
+            width: 100%;
+            display: flex;
+        }
+
+        .Recievers {
+            padding: 0 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>站內信</h1>
+        <hr>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#!/InboxMail" role="tab"
+                    aria-controls="home" aria-selected="true">收件匣</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#!/SentboxMail" role="tab"
+                    aria-controls="profile" aria-selected="false">寄件匣</a>
+            </li>
+        </ul>
+
+    </div>
+    <div ng-controller="InboxMailController"></div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.8.21/dayjs.min.js'></script>
+    <script src="https://unpkg.com/dayjs@1.8.21/locale/zh-cn.js"></script>
+    <script>
+        dayjs.locale('zh-cn')
+        var app = angular.module('app', ['ngRoute']);
+
+
+        app.controller('InboxMailController', ['$scope', '$http','$location', function ($scope, $http,$location) {
+            let url = 'https://next.json-generator.com/api/json/get/VJ3-lwHa_';
+            $http.get(url).then((res) => {
+
+                console.log(res);
+                
+                // $scope.origData = res.data.InboxMailList.map(el => {
+                //     el.SendDate = +el.SendDate.slice(6, -2)
+                //     el.date = dayjs(el.SendDate).format('YYYY/MM/DD (dd) HH:mm:ss')
+                //     return el
+                // });
+
+                $scope.data = $scope.origData
+            }), function (res) {
+                console.error("response error");
+            }
+
+        }])
+    </script>
+</body>
+
+</html>
